@@ -24,5 +24,9 @@ namespace Entities.Pocos
         [Required]
         [ForeignKey("IdClient")]
         public virtual Client Client { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Status { get; set; }
     }
 }

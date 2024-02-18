@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 
 namespace Entities.Pocos
 {
-    [Table("Stock")]
-    public class Stock
+    [Table("StockSortie")]
+    public class StockSortie
     {
         [Key]
-        public int IdStock { get; set; }
+        public int IdStockSortie { get; set; }
+
+        [Required]
+        public LigneFacture LigneFacture { get; set; }
 
         [Required]
         public DateTime DateMouvement { get; set; }
@@ -20,9 +23,7 @@ namespace Entities.Pocos
         [Required]
         public String Sens { get; set; }
 
-        [Required]
-        [ForeignKey("IdLigneFacture")]
-        public LigneFacture LigneFacture { get; set; }
+       
 
       
     }

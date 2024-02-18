@@ -12,7 +12,7 @@ namespace Entities.Pocos
     public class FactureFournisseur
     {
         [Key]
-        public int IdFournisseur { get; set; }
+        public int IdFactureFournisseur { get; set; }
 
         [Required]
         public EnteteFactureFournisseur EnteteFactureFournisseur { get; set; }

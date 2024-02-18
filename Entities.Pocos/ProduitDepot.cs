@@ -9,38 +9,25 @@ using System.Threading.Tasks;
 
 namespace Entities.Pocos
 {
-    [Table("LigneFacture")]
-    [Index("IdProduit", "IdFacture", IsUnique = true)]
-    public class LigneFacture
+    [Table("ProduitDepot")]
+    [Index("IdProduit", "IdDepot", IsUnique = true)]
+    public class ProduitDepot
     {
         [Key]
-        public int IdLigneFacture { get; set; }
+        public int IdProduitDepot { get; set; }
+        public DateTime DateInventaire { get; set; }
+        public string TypeInventaire { get; set; }
+        public String? Description { get; set; }
         public int IdProduit { get; set; }
 
         [ForeignKey("IdProduit")]
         public Produit Produit { get; set; }
-
-        public int IdFacture { get; set; }
-
-        [ForeignKey("IdFacture")]
-        public Facture Facture { get; set; }
-
-        public int? IdStockSortie { get; set; }
-
-        [ForeignKey("IdStockSortie")]
-        public StockSortie? StockSortie { get; set; }
-
         public int IdDepot { get; set; }
 
         [ForeignKey("IdDepot")]
         public Depot Depot { get; set; }
 
-
         [Column(TypeName = "decimal(5,2)")]
-        public decimal Prix { get; set; }
-
-        [Column(TypeName = "decimal(5,2)")]
-        public decimal Quantite { get; set; }
-
+        public decimal StockInitial { get; set; }
     }
 }

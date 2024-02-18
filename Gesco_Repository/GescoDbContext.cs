@@ -15,7 +15,11 @@ namespace Gesco_Repository
         public DbSet<LigneFactureFournisseur> LignesFacturesFournisseur { get; set; }
         public DbSet<Produit> Produits { get; set; }
         public DbSet<ProduitFournisseur> ProduitsFournisseur { get; set; }
-        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<StockSortie> Stocks { get; set; }
+        public DbSet<Depot> Depot { get; set; }
+        public DbSet<ProduitDepot> ProduitDepot { get; set; }
+        public DbSet<Production> Production { get; set; }
+        public DbSet<StockEntree> StockEntree { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -25,6 +29,5 @@ namespace Gesco_Repository
             optionsBuilder.UseSqlServer("Data Source=POWERNEWLIFE\\SQL2022;Initial Catalog=gesco;Integrated Security=True;TrustServerCertificate=True");
         }
 
-       
     }
 }

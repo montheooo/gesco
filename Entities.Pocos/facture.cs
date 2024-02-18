@@ -16,8 +16,8 @@ namespace Entities.Pocos
 
         [MaxLength(50)]
         public String ? ReferenceFacture { get; set; }
-        public  EnteteFacture  EnteteFacture { get; set; }
-        public ICollection<LigneFacture> LigneFacture { get; set; }
+        public EnteteFacture  EnteteFacture { get; set; }
+        public virtual ICollection<LigneFacture>? LigneFacture { get; set; }
 
         
     }

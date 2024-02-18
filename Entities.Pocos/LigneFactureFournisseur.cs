@@ -13,7 +13,12 @@ namespace Entities.Pocos
     {
         [Key]
         public int IdLigneFactureFournisseur { get; set; }
-        public int Quantite { get; set; }
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal Quantite { get; set; }
+
+        [Column(TypeName="decimal(5,2)")]
+        public decimal Prix { get; set; }
 
         [ForeignKey("IdProduit")]
         public ProduitFournisseur ProduitFournisseur { get; set; }
