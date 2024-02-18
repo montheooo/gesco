@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Entities.DTO\Entities.DTO.csproj" />
     <ProjectReference Include="..\Gesco_DataAccess\Gesco_DataAccess.csproj" />
   </ItemGroup>
 
