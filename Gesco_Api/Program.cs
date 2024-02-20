@@ -17,6 +17,7 @@ namespace Gesco_Api
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<GescoDbContext>();
+            builder.Services.AddCors();
             //builder.Services.AddScoped<IGlobalRepository<Produit>, GlobalRepositoryImpl>();
             //builder.Services.AddDbContext<EFEventDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("EventDbContext")));
 
@@ -26,6 +27,14 @@ namespace Gesco_Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
+            app.UseCors(options =>
+            {
+                options.AllowAnyOrigin();
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();
+            });
+          
 
             app.UseHttpsRedirection();
 
