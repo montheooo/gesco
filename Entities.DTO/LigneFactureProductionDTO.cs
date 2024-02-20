@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class LigneFactureDTO
+    public class LigneFactureProductionDTO
     {
         public int idArticle { get; set; }
         public string nomArticle { get; set; }
