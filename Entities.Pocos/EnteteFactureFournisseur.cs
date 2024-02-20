@@ -21,9 +21,9 @@ namespace Entities.Pocos
         [Required]
         public DateTime DateFacture { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public String ReferenceFactureFournisseur { get; set; }
+        [StringLength(50)]
+        public string Status { get; set; }
+
 
         [Required]
         [ForeignKey("IdFournisseur")]

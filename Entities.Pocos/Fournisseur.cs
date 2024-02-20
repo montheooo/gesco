@@ -21,6 +21,6 @@ namespace Entities.Pocos
 
         [Column("AddresseFournisseur")]
         [MaxLength(50)]
-        public String AddresseFournisseur { get; set;}
+        public String? AddresseFournisseur { get; set;}
     }
 }

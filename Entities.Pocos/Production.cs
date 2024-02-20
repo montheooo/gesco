@@ -15,19 +15,29 @@ namespace Entities.Pocos
         public int IdProduction { get; set; }
         public DateTime DateDebutProduction { get; set; }
         public DateTime? DateFinProduction { get; set; }
-        public int IdStockEntree { get; set; }
+
+        [StringLength(50)]
+        public string StatusProduction { get; set; }
+
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal CoutProduction { get; set; }
+
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal CoutRevient { get; set; }
+
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal PrixUnitaireRecommande { get; set; }
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal Quantite { get; set; }
+
         public int IdProduit { get; set; }
 
         [ForeignKey("IdProduit")]
         public Produit Produit { get; set; }
 
-        [ForeignKey("IdStockEntree")]
-        public StockEntree StockEntree { get; set; }
-        public int IdFactureFournisseur { get; set; }
-
-        [ForeignKey("IdFactureFournisseur")]
-        public FactureFournisseur FactureFournisseur { get; set; }
-
-
+      
+       
     }
 }

@@ -17,8 +17,14 @@ namespace Entities.Pocos
         [Required]
         public EnteteFactureFournisseur EnteteFactureFournisseur { get; set; }
 
-        [ForeignKey("IdLigneFactureFournisseur")]
+        [StringLength(50)]
+        public string ReferenceFacture { get; set; }
+
         public ICollection<LigneFactureFournisseur> LigneFactureFournisseur { get; set; }
+        public int IdProduction { get; set; }
+
+        [ForeignKey("IdProduction")]
+        public Production Production { get; set; }
 
     }
 }
