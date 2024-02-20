@@ -19,6 +19,8 @@ namespace Gesco_Api.Controllers
         {
             _logger = logger;
         } 
+
+
         [HttpGet]
         public ActionResult<Facture> Get()
 
