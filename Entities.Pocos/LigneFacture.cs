@@ -42,5 +42,9 @@ namespace Entities.Pocos
         [Column(TypeName = "decimal(5,2)")]
         public decimal Quantite { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal Montant { get; set; }
+
     }
 }

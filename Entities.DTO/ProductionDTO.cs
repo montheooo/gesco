@@ -14,6 +14,7 @@ namespace Entities.DTO
         public decimal CoutRevient { get; set; }
         public string Status { get; set; }
         public int IdProduction { get; set; }
+        public string Produit { get; set; }
         public List<FactureProductionDTO> FacturesProduction { get; set; }
     }
 }

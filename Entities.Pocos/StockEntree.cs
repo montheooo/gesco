@@ -27,11 +27,6 @@ namespace Entities.Pocos
         [Column(TypeName = "decimal(6,2)")]
         public decimal Valeur { get; set; }
 
-        public int? IdProduction { get; set; }
-
-        [ForeignKey("IdProduction")]
-        public Production Production { get; set; }
-
         public int IdProduit { get; set; }
 
         [ForeignKey("IdProduit")]

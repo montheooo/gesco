@@ -26,7 +26,7 @@ namespace Gesco_Api.Controllers
         {
             var productionsDTo = new List<ProductionDTO>();
 
-            var ligneFactureList = _productionpository.GetAll(lignefac => lignefac.FactureFournisseur.EnteteFactureFournisseur, lignefac => lignefac.ProduitFournisseur, lignefac => lignefac.FactureFournisseur.EnteteFactureFournisseur.Fournisseur, lignefac => lignefac.FactureFournisseur.Production);
+            var ligneFactureList = _productionpository.GetAll(lignefac => lignefac.FactureFournisseur.EnteteFactureFournisseur, lignefac => lignefac.ProduitFournisseur, lignefac => lignefac.FactureFournisseur.EnteteFactureFournisseur.Fournisseur, lignefac => lignefac.FactureFournisseur.Production, lignefac => lignefac.FactureFournisseur.Production.Produit);
 
             var productionList = ligneFactureList.DistinctBy(ligne => ligne.FactureFournisseur.Production.IdProduction).ToList();
 
@@ -41,13 +41,13 @@ namespace Gesco_Api.Controllers
                 productionDTo.IdProduction = item.FactureFournisseur.IdProduction;
                 productionDTo.Status = item.FactureFournisseur.Production.StatusProduction;
                 productionDTo.CoutRevient = 0;
+                productionDTo.Produit = item.FactureFournisseur.Production.Produit.NomProduit;
+                productionDTo.QuantiteProduction = item.FactureFournisseur.Production.Quantite;
                 productionDTo.FacturesProduction = new List<FactureProductionDTO>();
 
 
                 foreach (var item1 in factureList)
                 {
-                    
-
                     if (productionDTo.IdProduction == item1.FactureFournisseur.IdProduction)
                     {
                         var FactureDTO = new FactureProductionDTO();
@@ -56,7 +56,8 @@ namespace Gesco_Api.Controllers
                         FactureDTO.NomFournisseur = item1.FactureFournisseur.EnteteFactureFournisseur.Fournisseur.NomFournisseur;
                         FactureDTO.NumeroFacture = item1.FactureFournisseur.IdFactureFournisseur;
                         FactureDTO.ReferenceFacture = item1.FactureFournisseur.ReferenceFacture;
-                        FactureDTO.LignesFactureProductionDTO = new List<LigneFactureProductionDTO>();
+                        FactureDTO.MontantFacture = 0;
+                        FactureDTO.LignesFactureProduction = new List<LigneFactureProductionDTO>();
 
                         foreach (var item2 in ligneFactureList)
                         {
@@ -69,24 +70,20 @@ namespace Gesco_Api.Controllers
                                 ligneDTO.quantite = item2.Quantite;
                                 ligneDTO.prixUnitaire = item2.Prix;
 
-                                FactureDTO.LignesFactureProductionDTO.Add(ligneDTO);
+                                FactureDTO.LignesFactureProduction.Add(ligneDTO);
                             }
                         }
+
+                        FactureDTO.MontantFacture = FactureDTO.LignesFactureProduction.Sum(f => f.quantite * f.prixUnitaire);
                         productionDTo.FacturesProduction.Add(FactureDTO);
                     }
-
-                   
-
-                    
-                    
                 }
 
-              
-
+                productionDTo.CoutProduction = productionDTo.FacturesProduction.Sum(f => f.MontantFacture);
                 productionsDTo.Add(productionDTo);
             }
 
-            _logger.LogInformation("Toutes les Factures recuperer", productionsDTo.ToString());
+            _logger.LogInformation("Toutes les productions recuperer", productionsDTo.ToString());
 
             return new OkObjectResult(productionsDTo);
 

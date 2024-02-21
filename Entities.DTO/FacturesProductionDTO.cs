@@ -14,6 +14,6 @@ namespace Entities.DTO
         public int NumeroFacture { get; set; }
         public decimal MontantFacture { get; set; }
         public string NomFournisseur { get; set; }
-        public List<LigneFactureProductionDTO> LignesFactureProductionDTO { get; set; }
+        public List<LigneFactureProductionDTO> LignesFactureProduction { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Entities.DTO
         public string nomClient { get; set; }
         public int numeroFacture { get; set; }
         public string referenceFacture { get; set; }
+        public decimal montantFacture { get; set; }
         public List<LigneFactureDTO> ligneFactures { get; set; } = new List<LigneFactureDTO>() ;
 
 
