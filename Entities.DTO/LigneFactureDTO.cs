@@ -10,6 +10,7 @@ namespace Entities.DTO
     {
         public int idArticle { get; set; }
         public string nomArticle { get; set; }
+        public string nomDepot { get; set; }
         public decimal prixUnitaire { get; set; }
         public decimal quantite { get; set; }
     }

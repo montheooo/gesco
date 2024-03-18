@@ -22,7 +22,7 @@ namespace Entities.Pocos
         [Column(TypeName = "decimal(5,2)")]
         public decimal PrixProduit { get; set; } = 0;
 
-        public int SuiviStock{ get; set; }
+        public int SuiviStock { get; set; } = 0;
 
 
 

@@ -1,4 +1,5 @@
 ﻿using Entities.DTO;
+using Entities.DTO.client;
 using Entities.Pocos;
 using Gesco_DataAccess;
 using Gesco_Repository;
@@ -14,12 +15,46 @@ namespace Gesco_Api.Controllers
     {
         private readonly ILogger<InvoicesController> _logger;
         private readonly IGlobalRepository<LigneFacture> _facturepository = new GlobalRepositoryImpl<LigneFacture>();
+        private readonly IGlobalRepository<Produit> _produitrepository = new GlobalRepositoryImpl<Produit>();
+        private readonly IGlobalRepository<Client> _clientrepository = new GlobalRepositoryImpl<Client>();
+        private readonly IGlobalRepository<Depot> _depotrepository = new GlobalRepositoryImpl<Depot>();
+        private readonly IinvoicesRepository _invoiceRepository = new InvoicesRepositoryImpl();
 
         public InvoicesController(ILogger<InvoicesController> logger)
         {
             _logger = logger;
-        } 
+        }
 
+        [HttpGet]
+        [Route("add-invoice-data")]
+        public ActionResult<Facture> GetInvoiceData()
+
+        {
+            var invoiceDataDTO = new InvoiceDataDTO();
+
+            invoiceDataDTO.Articles = _produitrepository.GetAll().ToList();
+            invoiceDataDTO.Clients = _clientrepository.GetAll().ToList();
+            invoiceDataDTO.Depots = _depotrepository.GetAll().ToList();
+
+            return new OkObjectResult(invoiceDataDTO);
+        }
+
+        [HttpPost]
+        [Route("post-invoice")]
+        public ActionResult PostInvoice([FromBody]  FactureDTOClient invoice )
+
+        {
+            try
+            {
+                _invoiceRepository.addInvoice(invoice);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.ToString());
+            }
+
+            return Accepted();
+        }
 
         [HttpGet]
         public ActionResult<Facture> Get()
@@ -27,7 +62,7 @@ namespace Gesco_Api.Controllers
         {
             var facturesDTo = new List<FactureDTO>();
 
-            var ligneFactureList = _facturepository.GetAll(lignefac => lignefac.Facture.EnteteFacture, lignefac => lignefac.Produit, lignefac => lignefac.Facture.EnteteFacture.Client);
+            var ligneFactureList = _facturepository.GetAll(lignefac => lignefac.Facture.EnteteFacture, lignefac => lignefac.Produit, lignefac => lignefac.Facture.EnteteFacture.Client, lignefac => lignefac.Depot);
 
             var factureList = ligneFactureList.DistinctBy(ligne => ligne.IdFacture).ToList();
 
@@ -53,10 +88,13 @@ namespace Gesco_Api.Controllers
                         ligneFactureDTO.prixUnitaire = item1.Prix;
                         ligneFactureDTO.quantite = item1.Quantite;
                         ligneFactureDTO.nomArticle = item1.Produit.NomProduit;
+                        ligneFactureDTO.nomDepot = item1.Depot.NomDepot; 
 
                         factureDTo.ligneFactures.Add(ligneFactureDTO); 
                     }
                 }
+
+                factureDTo.montantFacture = factureDTo.ligneFactures.Sum(l => l.quantite * l.prixUnitaire);
 
                 facturesDTo.Add(factureDTo);
             }

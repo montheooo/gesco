@@ -30,7 +30,7 @@ namespace Entities.Pocos
         [ForeignKey("IdStockSortie")]
         public StockSortie? StockSortie { get; set; }
 
-        public int IdDepot { get; set; }
+        public int? IdDepot { get; set; }
 
         [ForeignKey("IdDepot")]
         public Depot Depot { get; set; }
@@ -42,9 +42,9 @@ namespace Entities.Pocos
         [Column(TypeName = "decimal(5,2)")]
         public decimal Quantite { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        
         [Column(TypeName = "decimal(6,2)")]
-        public decimal Montant { get; set; }
+        public decimal? Montant { get; set; }
 
     }
 }

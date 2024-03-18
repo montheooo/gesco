@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Entities.Pocos\Entities.Pocos.csproj" />
+  </ItemGroup>
+
 </Project>

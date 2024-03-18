@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Entities.DTO\Entities.DTO.csproj" />
     <ProjectReference Include="..\Entities.Pocos\Entities.Pocos.csproj" />
   </ItemGroup>
 

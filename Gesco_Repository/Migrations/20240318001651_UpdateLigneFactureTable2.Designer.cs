@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gesco_Repository.Migrations
 {
     [DbContext(typeof(GescoDbContext))]
-    [Migration("20240218181124_Init_Schema_Invoices_Management")]
-    partial class Init_Schema_Invoices_Management
+    [Migration("20240318001651_UpdateLigneFactureTable2")]
+    partial class UpdateLigneFactureTable2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -113,7 +113,7 @@ namespace Gesco_Repository.Migrations
                     b.Property<int>("IdFournisseur")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReferenceFactureFournisseur")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -137,6 +137,7 @@ namespace Gesco_Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFacture"));
 
                     b.Property<string>("ReferenceFacture")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -153,7 +154,17 @@ namespace Gesco_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFactureFournisseur"));
 
+                    b.Property<int>("IdProduction")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceFacture")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("IdFactureFournisseur");
+
+                    b.HasIndex("IdProduction");
 
                     b.ToTable("FactureFournisseur");
                 });
@@ -167,7 +178,6 @@ namespace Gesco_Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFournisseur"));
 
                     b.Property<string>("AddresseFournisseur")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("AddresseFournisseur");
@@ -191,7 +201,7 @@ namespace Gesco_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLigneFacture"));
 
-                    b.Property<int>("IdDepot")
+                    b.Property<int?>("IdDepot")
                         .HasColumnType("int");
 
                     b.Property<int>("IdFacture")
@@ -202,6 +212,9 @@ namespace Gesco_Repository.Migrations
 
                     b.Property<int?>("IdStockSortie")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("Montant")
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<decimal>("Prix")
                         .HasColumnType("decimal(5,2)");
@@ -228,6 +241,12 @@ namespace Gesco_Repository.Migrations
             modelBuilder.Entity("Entities.Pocos.LigneFactureFournisseur", b =>
                 {
                     b.Property<int>("IdLigneFactureFournisseur")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLigneFactureFournisseur"));
+
+                    b.Property<int>("IdFactureFournisseur")
                         .HasColumnType("int");
 
                     b.Property<int>("IdProduit")
@@ -241,7 +260,10 @@ namespace Gesco_Repository.Migrations
 
                     b.HasKey("IdLigneFactureFournisseur");
 
-                    b.HasIndex("IdProduit");
+                    b.HasIndex("IdFactureFournisseur");
+
+                    b.HasIndex("IdProduit", "IdFactureFournisseur")
+                        .IsUnique();
 
                     b.ToTable("LigneFactureFournisseur");
                 });
@@ -254,28 +276,35 @@ namespace Gesco_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProduction"));
 
+                    b.Property<decimal>("CoutProduction")
+                        .HasColumnType("decimal(6,2)");
+
+                    b.Property<decimal>("CoutRevient")
+                        .HasColumnType("decimal(6,2)");
+
                     b.Property<DateTime>("DateDebutProduction")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateFinProduction")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdFactureFournisseur")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdProduit")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdStockEntree")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PrixUnitaireRecommande")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("Quantite")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("StatusProduction")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdProduction");
 
-                    b.HasIndex("IdFactureFournisseur");
-
                     b.HasIndex("IdProduit");
-
-                    b.HasIndex("IdStockEntree");
 
                     b.ToTable("Production");
                 });
@@ -370,14 +399,31 @@ namespace Gesco_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdStockEntree"));
 
+                    b.Property<string>("Commentaire")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime>("DateMouvement")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdProduit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int");
+
                     b.Property<string>("Sens")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<decimal>("Valeur")
+                        .HasColumnType("decimal(6,2)");
 
                     b.HasKey("IdStockEntree");
+
+                    b.HasIndex("IdProduit");
 
                     b.ToTable("StockEntree");
                 });
@@ -440,13 +486,22 @@ namespace Gesco_Repository.Migrations
                     b.Navigation("Fournisseur");
                 });
 
+            modelBuilder.Entity("Entities.Pocos.FactureFournisseur", b =>
+                {
+                    b.HasOne("Entities.Pocos.Production", "Production")
+                        .WithMany()
+                        .HasForeignKey("IdProduction")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Production");
+                });
+
             modelBuilder.Entity("Entities.Pocos.LigneFacture", b =>
                 {
                     b.HasOne("Entities.Pocos.Depot", "Depot")
                         .WithMany()
-                        .HasForeignKey("IdDepot")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IdDepot");
 
                     b.HasOne("Entities.Pocos.Facture", "Facture")
                         .WithMany("LigneFacture")
@@ -477,7 +532,7 @@ namespace Gesco_Repository.Migrations
                 {
                     b.HasOne("Entities.Pocos.FactureFournisseur", "FactureFournisseur")
                         .WithMany("LigneFactureFournisseur")
-                        .HasForeignKey("IdLigneFactureFournisseur")
+                        .HasForeignKey("IdFactureFournisseur")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -494,29 +549,13 @@ namespace Gesco_Repository.Migrations
 
             modelBuilder.Entity("Entities.Pocos.Production", b =>
                 {
-                    b.HasOne("Entities.Pocos.FactureFournisseur", "FactureFournisseur")
-                        .WithMany()
-                        .HasForeignKey("IdFactureFournisseur")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Entities.Pocos.Produit", "Produit")
                         .WithMany()
                         .HasForeignKey("IdProduit")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Pocos.StockEntree", "StockEntree")
-                        .WithMany()
-                        .HasForeignKey("IdStockEntree")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FactureFournisseur");
-
                     b.Navigation("Produit");
-
-                    b.Navigation("StockEntree");
                 });
 
             modelBuilder.Entity("Entities.Pocos.ProduitDepot", b =>
@@ -534,6 +573,17 @@ namespace Gesco_Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("Depot");
+
+                    b.Navigation("Produit");
+                });
+
+            modelBuilder.Entity("Entities.Pocos.StockEntree", b =>
+                {
+                    b.HasOne("Entities.Pocos.Produit", "Produit")
+                        .WithMany()
+                        .HasForeignKey("IdProduit")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Produit");
                 });

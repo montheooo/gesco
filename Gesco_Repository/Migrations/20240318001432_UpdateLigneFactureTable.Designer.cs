@@ -4,6 +4,7 @@ using Gesco_Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gesco_Repository.Migrations
 {
     [DbContext(typeof(GescoDbContext))]
-    partial class GescoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318001432_UpdateLigneFactureTable")]
+    partial class UpdateLigneFactureTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,7 +213,7 @@ namespace Gesco_Repository.Migrations
                     b.Property<int?>("IdStockSortie")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Montant")
+                    b.Property<decimal>("Montant")
                         .HasColumnType("decimal(6,2)");
 
                     b.Property<decimal>("Prix")

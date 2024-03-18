@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Gesco_Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Init_Schema_Invoices_Management : Migration
+    public partial class Update_Schema2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,25 +52,13 @@ namespace Gesco_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FactureFournisseur",
-                columns: table => new
-                {
-                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FactureFournisseur", x => x.IdFactureFournisseur);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Fournisseur",
                 columns: table => new
                 {
                     IdFournisseur = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NomFournisseur = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AddresseFournisseur = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    AddresseFournisseur = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -104,20 +92,6 @@ namespace Gesco_Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProduitFournisseur", x => x.IdProduit);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StockEntree",
-                columns: table => new
-                {
-                    IdStockEntree = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateMouvement = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Sens = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StockEntree", x => x.IdStockEntree);
                 });
 
             migrationBuilder.CreateTable(
@@ -163,30 +137,28 @@ namespace Gesco_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EnteteFactureFournisseur",
+                name: "Production",
                 columns: table => new
                 {
-                    IdEnteteFactureFournisseur = table.Column<int>(type: "int", nullable: false)
+                    IdProduction = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false),
-                    DateFacture = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReferenceFactureFournisseur = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    IdFournisseur = table.Column<int>(type: "int", nullable: false)
+                    DateDebutProduction = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateFinProduction = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StatusProduction = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CoutProduction = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    CoutRevient = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    PrixUnitaireRecommande = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    Quantite = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    IdProduit = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EnteteFactureFournisseur", x => x.IdEnteteFactureFournisseur);
+                    table.PrimaryKey("PK_Production", x => x.IdProduction);
                     table.ForeignKey(
-                        name: "FK_EnteteFactureFournisseur_FactureFournisseur_IdFactureFournisseur",
-                        column: x => x.IdFactureFournisseur,
-                        principalTable: "FactureFournisseur",
-                        principalColumn: "IdFactureFournisseur",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EnteteFactureFournisseur_Fournisseur_IdFournisseur",
-                        column: x => x.IdFournisseur,
-                        principalTable: "Fournisseur",
-                        principalColumn: "IdFournisseur",
+                        name: "FK_Production_Produit_IdProduit",
+                        column: x => x.IdProduit,
+                        principalTable: "Produit",
+                        principalColumn: "IdProduit",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -221,63 +193,26 @@ namespace Gesco_Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LigneFactureFournisseur",
+                name: "StockEntree",
                 columns: table => new
                 {
-                    IdLigneFactureFournisseur = table.Column<int>(type: "int", nullable: false),
-                    Quantite = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    Prix = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    IdStockEntree = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateMouvement = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Sens = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Commentaire = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Quantite = table.Column<int>(type: "int", nullable: false),
+                    Valeur = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
                     IdProduit = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LigneFactureFournisseur", x => x.IdLigneFactureFournisseur);
+                    table.PrimaryKey("PK_StockEntree", x => x.IdStockEntree);
                     table.ForeignKey(
-                        name: "FK_LigneFactureFournisseur_FactureFournisseur_IdLigneFactureFournisseur",
-                        column: x => x.IdLigneFactureFournisseur,
-                        principalTable: "FactureFournisseur",
-                        principalColumn: "IdFactureFournisseur",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_LigneFactureFournisseur_ProduitFournisseur_IdProduit",
-                        column: x => x.IdProduit,
-                        principalTable: "ProduitFournisseur",
-                        principalColumn: "IdProduit",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Production",
-                columns: table => new
-                {
-                    IdProduction = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateDebutProduction = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateFinProduction = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdStockEntree = table.Column<int>(type: "int", nullable: false),
-                    IdProduit = table.Column<int>(type: "int", nullable: false),
-                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Production", x => x.IdProduction);
-                    table.ForeignKey(
-                        name: "FK_Production_FactureFournisseur_IdFactureFournisseur",
-                        column: x => x.IdFactureFournisseur,
-                        principalTable: "FactureFournisseur",
-                        principalColumn: "IdFactureFournisseur",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Production_Produit_IdProduit",
+                        name: "FK_StockEntree_Produit_IdProduit",
                         column: x => x.IdProduit,
                         principalTable: "Produit",
                         principalColumn: "IdProduit",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Production_StockEntree_IdStockEntree",
-                        column: x => x.IdStockEntree,
-                        principalTable: "StockEntree",
-                        principalColumn: "IdStockEntree",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -292,7 +227,8 @@ namespace Gesco_Repository.Migrations
                     IdStockSortie = table.Column<int>(type: "int", nullable: true),
                     IdDepot = table.Column<int>(type: "int", nullable: false),
                     Prix = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
-                    Quantite = table.Column<decimal>(type: "decimal(5,2)", nullable: false)
+                    Quantite = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    Montant = table.Column<decimal>(type: "decimal(6,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,6 +258,82 @@ namespace Gesco_Repository.Migrations
                         principalColumn: "IdStockSortie");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FactureFournisseur",
+                columns: table => new
+                {
+                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReferenceFacture = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IdProduction = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FactureFournisseur", x => x.IdFactureFournisseur);
+                    table.ForeignKey(
+                        name: "FK_FactureFournisseur_Production_IdProduction",
+                        column: x => x.IdProduction,
+                        principalTable: "Production",
+                        principalColumn: "IdProduction",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EnteteFactureFournisseur",
+                columns: table => new
+                {
+                    IdEnteteFactureFournisseur = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false),
+                    DateFacture = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    IdFournisseur = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnteteFactureFournisseur", x => x.IdEnteteFactureFournisseur);
+                    table.ForeignKey(
+                        name: "FK_EnteteFactureFournisseur_FactureFournisseur_IdFactureFournisseur",
+                        column: x => x.IdFactureFournisseur,
+                        principalTable: "FactureFournisseur",
+                        principalColumn: "IdFactureFournisseur",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EnteteFactureFournisseur_Fournisseur_IdFournisseur",
+                        column: x => x.IdFournisseur,
+                        principalTable: "Fournisseur",
+                        principalColumn: "IdFournisseur",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LigneFactureFournisseur",
+                columns: table => new
+                {
+                    IdLigneFactureFournisseur = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantite = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    Prix = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    IdProduit = table.Column<int>(type: "int", nullable: false),
+                    IdFactureFournisseur = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LigneFactureFournisseur", x => x.IdLigneFactureFournisseur);
+                    table.ForeignKey(
+                        name: "FK_LigneFactureFournisseur_FactureFournisseur_IdFactureFournisseur",
+                        column: x => x.IdFactureFournisseur,
+                        principalTable: "FactureFournisseur",
+                        principalColumn: "IdFactureFournisseur",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LigneFactureFournisseur_ProduitFournisseur_IdProduit",
+                        column: x => x.IdProduit,
+                        principalTable: "ProduitFournisseur",
+                        principalColumn: "IdProduit",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EnteteFacture_IdClient",
                 table: "EnteteFacture",
@@ -343,6 +355,11 @@ namespace Gesco_Repository.Migrations
                 name: "IX_EnteteFactureFournisseur_IdFournisseur",
                 table: "EnteteFactureFournisseur",
                 column: "IdFournisseur");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactureFournisseur_IdProduction",
+                table: "FactureFournisseur",
+                column: "IdProduction");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LigneFacture_IdDepot",
@@ -368,24 +385,20 @@ namespace Gesco_Repository.Migrations
                 filter: "[IdStockSortie] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LigneFactureFournisseur_IdProduit",
+                name: "IX_LigneFactureFournisseur_IdFactureFournisseur",
                 table: "LigneFactureFournisseur",
-                column: "IdProduit");
+                column: "IdFactureFournisseur");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Production_IdFactureFournisseur",
-                table: "Production",
-                column: "IdFactureFournisseur");
+                name: "IX_LigneFactureFournisseur_IdProduit_IdFactureFournisseur",
+                table: "LigneFactureFournisseur",
+                columns: new[] { "IdProduit", "IdFactureFournisseur" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Production_IdProduit",
                 table: "Production",
                 column: "IdProduit");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Production_IdStockEntree",
-                table: "Production",
-                column: "IdStockEntree");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProduitDepot_IdDepot",
@@ -397,6 +410,11 @@ namespace Gesco_Repository.Migrations
                 table: "ProduitDepot",
                 columns: new[] { "IdProduit", "IdDepot" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockEntree_IdProduit",
+                table: "StockEntree",
+                column: "IdProduit");
         }
 
         /// <inheritdoc />
@@ -415,10 +433,10 @@ namespace Gesco_Repository.Migrations
                 name: "LigneFactureFournisseur");
 
             migrationBuilder.DropTable(
-                name: "Production");
+                name: "ProduitDepot");
 
             migrationBuilder.DropTable(
-                name: "ProduitDepot");
+                name: "StockEntree");
 
             migrationBuilder.DropTable(
                 name: "Client");
@@ -433,16 +451,16 @@ namespace Gesco_Repository.Migrations
                 name: "StockSortie");
 
             migrationBuilder.DropTable(
-                name: "ProduitFournisseur");
-
-            migrationBuilder.DropTable(
                 name: "FactureFournisseur");
 
             migrationBuilder.DropTable(
-                name: "StockEntree");
+                name: "ProduitFournisseur");
 
             migrationBuilder.DropTable(
                 name: "Depot");
+
+            migrationBuilder.DropTable(
+                name: "Production");
 
             migrationBuilder.DropTable(
                 name: "Produit");

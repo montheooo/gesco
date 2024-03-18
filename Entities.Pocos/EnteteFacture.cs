@@ -15,6 +15,9 @@ namespace Entities.Pocos
         public int IdEnteteFacture { get; set; }
 
         [Required]
+        public int IdClient { get; set; }
+
+        [Required]
         public DateTime DateFacture { get; set; }
 
         [Required]

@@ -4,6 +4,7 @@ using Gesco_Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gesco_Repository.Migrations
 {
     [DbContext(typeof(GescoDbContext))]
-    partial class GescoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240221020102_Update_Schema2")]
+    partial class Update_Schema2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,7 +137,6 @@ namespace Gesco_Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFacture"));
 
                     b.Property<string>("ReferenceFacture")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -198,7 +200,7 @@ namespace Gesco_Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdLigneFacture"));
 
-                    b.Property<int?>("IdDepot")
+                    b.Property<int>("IdDepot")
                         .HasColumnType("int");
 
                     b.Property<int>("IdFacture")
@@ -210,7 +212,8 @@ namespace Gesco_Repository.Migrations
                     b.Property<int?>("IdStockSortie")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Montant")
+                    b.Property<decimal>("Montant")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(6,2)");
 
                     b.Property<decimal>("Prix")
@@ -498,7 +501,9 @@ namespace Gesco_Repository.Migrations
                 {
                     b.HasOne("Entities.Pocos.Depot", "Depot")
                         .WithMany()
-                        .HasForeignKey("IdDepot");
+                        .HasForeignKey("IdDepot")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.Pocos.Facture", "Facture")
                         .WithMany("LigneFacture")
