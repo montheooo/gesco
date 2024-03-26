@@ -13,11 +13,12 @@ namespace Gesco_Api.Controllers
     public class ProductionController : ControllerBase
     {
         private readonly ILogger<ProductionController> _logger;
-        private readonly IGlobalRepository<LigneFactureFournisseur> _productionpository = new GlobalRepositoryImpl<LigneFactureFournisseur>();
+        private readonly IGlobalRepository<LigneFactureFournisseur> _productionpository ;
 
-        public ProductionController(ILogger<ProductionController> logger)
+        public ProductionController(ILogger<ProductionController> logger, IGlobalRepository<LigneFactureFournisseur> productionpository)
         {
             _logger = logger;
+            _productionpository = productionpository;
         }
 
         [HttpGet]

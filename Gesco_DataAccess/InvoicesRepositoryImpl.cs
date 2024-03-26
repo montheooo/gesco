@@ -12,9 +12,13 @@ namespace Gesco_DataAccess
 {
     public class InvoicesRepositoryImpl : IinvoicesRepository
     {
-        private readonly GescoDbContext _gescoDbContext = new GescoDbContext();
+        private readonly GescoDbContext _gescoDbContext;
 
-       
+        public InvoicesRepositoryImpl(GescoDbContext gescoDbContext)
+        {
+            _gescoDbContext = gescoDbContext;
+        }
+
         public void addInvoice(FactureDTOClient invoice)
         {
             using var transaction = _gescoDbContext.Database.BeginTransaction();

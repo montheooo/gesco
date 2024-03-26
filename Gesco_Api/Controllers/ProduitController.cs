@@ -12,11 +12,12 @@ namespace Gesco_Api.Controllers
        
 
         private readonly ILogger<ProduitController> _logger;
-        private readonly IGlobalRepository<Produit> _produitrepository = new GlobalRepositoryImpl<Produit>();
+        private readonly IGlobalRepository<Produit> _produitrepository;
 
-        public ProduitController(ILogger<ProduitController> logger)
+        public ProduitController(ILogger<ProduitController> logger, IGlobalRepository<Produit> produitrepository)
         {
             _logger = logger;
+            _produitrepository = produitrepository;
         }
 
         [HttpGet]

@@ -5,6 +5,9 @@ namespace Gesco_Repository
 {
     public class GescoDbContext : DbContext
     {
+        public GescoDbContext(DbContextOptions options): base(options) { }
+        
+
         public DbSet<Client> Clients { get; set; }
         public DbSet<EnteteFacture> EnteteFactures { get; set; }
         public DbSet<EnteteFactureFournisseur> EnteteFacturesFournisseur { get; set; }
@@ -22,12 +25,7 @@ namespace Gesco_Repository
         public DbSet<StockEntree> StockEntree { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // optionsBuilder.UseMySql("server=localhost;database=gesco;user=gesco;password=gesco");
-            // optionsBuilder.UseMySql("server=localhost;user=gesco;password=gesco;database=gesco", ServerVersion.AutoDetect("server=localhost;user=gesco;password=gesco"));
-            optionsBuilder.UseSqlServer("Data Source=POWERNEWLIFE\\SQL2022;Initial Catalog=gesco;Integrated Security=True;TrustServerCertificate=True");
-        }
+        
 
     }
 }

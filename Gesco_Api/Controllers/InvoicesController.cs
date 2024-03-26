@@ -14,15 +14,20 @@ namespace Gesco_Api.Controllers
     public class InvoicesController : ControllerBase
     {
         private readonly ILogger<InvoicesController> _logger;
-        private readonly IGlobalRepository<LigneFacture> _facturepository = new GlobalRepositoryImpl<LigneFacture>();
-        private readonly IGlobalRepository<Produit> _produitrepository = new GlobalRepositoryImpl<Produit>();
-        private readonly IGlobalRepository<Client> _clientrepository = new GlobalRepositoryImpl<Client>();
-        private readonly IGlobalRepository<Depot> _depotrepository = new GlobalRepositoryImpl<Depot>();
-        private readonly IinvoicesRepository _invoiceRepository = new InvoicesRepositoryImpl();
+        private readonly IGlobalRepository<LigneFacture> _facturepository ;
+        private readonly IGlobalRepository<Produit> _produitrepository ;
+        private readonly IGlobalRepository<Client> _clientrepository ;
+        private readonly IGlobalRepository<Depot> _depotrepository ;
+        private readonly IinvoicesRepository _invoiceRepository ;
 
-        public InvoicesController(ILogger<InvoicesController> logger)
+        public InvoicesController(ILogger<InvoicesController> logger, IGlobalRepository<LigneFacture> facturepository, IGlobalRepository<Produit> produitrepository, IGlobalRepository<Client> clientrepository, IGlobalRepository<Depot> depotrepository, IinvoicesRepository invoiceRepository)
         {
             _logger = logger;
+            _facturepository = facturepository;
+            _produitrepository = produitrepository;
+            _clientrepository = clientrepository;
+            _depotrepository = depotrepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         [HttpGet]

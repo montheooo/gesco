@@ -1,4 +1,5 @@
 
+using Entities.Pocos;
 using Gesco_DataAccess;
 using Gesco_Repository;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,19 @@ namespace Gesco_Api
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<GescoDbContext>();
             builder.Services.AddCors();
-            //builder.Services.AddScoped<IGlobalRepository<Produit>, GlobalRepositoryImpl>();
-            //builder.Services.AddDbContext<EFEventDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("EventDbContext")));
 
+            builder.Services.AddDbContext<GescoDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("GescoDbContext")));
+
+            builder.Services.AddScoped<IGlobalRepository<Produit>, GlobalRepositoryImpl<Produit>>();
+            builder.Services.AddScoped<IGlobalRepository<LigneFactureFournisseur>, GlobalRepositoryImpl<LigneFactureFournisseur>>();
+            builder.Services.AddScoped<IGlobalRepository<LigneFacture>, GlobalRepositoryImpl<LigneFacture>>();
+            builder.Services.AddScoped<IGlobalRepository<Client>, GlobalRepositoryImpl<Client>>();
+            builder.Services.AddScoped<IGlobalRepository<Depot>, GlobalRepositoryImpl<Depot>>();
+
+            builder.Services.AddScoped<IinvoicesRepository, InvoicesRepositoryImpl>();
+
+            
 
             // Build Application
 

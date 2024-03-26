@@ -6,7 +6,13 @@ namespace Gesco_DataAccess
 {
     public class GlobalRepositoryImpl<T> : IGlobalRepository<T> where T : class
     {
-        private readonly GescoDbContext _myContext = new GescoDbContext();
+        private readonly GescoDbContext _myContext;
+
+        public GlobalRepositoryImpl(GescoDbContext myDbContext)
+        {
+            _myContext = myDbContext;
+        }
+
         public void Add(params T[] items)
         {
             foreach (T item in items)
